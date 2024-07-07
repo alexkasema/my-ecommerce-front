@@ -7,12 +7,10 @@ const dbConnect = async () => {
 };
 
 dbConnect();
-
 export async function GET() {
-  const featuredProductId = process.env.FEATURED_PRODUCT_ID as string;
   try {
-    const featuredProduct = await Product.findById(featuredProductId);
-    return NextResponse.json(featuredProduct);
+    const newProducts = await Product.find().sort({ createdAt: -1 }).limit(4);
+    return NextResponse.json(newProducts);
   } catch (err) {
     return NextResponse.error();
   }
