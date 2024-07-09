@@ -16,7 +16,8 @@ import Button from "@/components/Button/Button";
 import Input from "@/components/StyledComponents/Input";
 
 const CartPage = () => {
-  const { cartProducts, addProduct, removeProduct } = useContext(CartContext);
+  const { cartProducts, addProduct, removeProduct, clearCart } =
+    useContext(CartContext);
 
   const [products, setProducts] = useState([]);
   const [name, setName] = useState("");
@@ -25,6 +26,7 @@ const CartPage = () => {
   const [postalCode, setPostalCode] = useState("");
   const [streetAddress, setStreetAddress] = useState("");
   const [country, setCountry] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const data = { cartProducts };
 
@@ -38,6 +40,16 @@ const CartPage = () => {
     }
   }, [cartProducts]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    if (window?.location.href.includes("success")) {
+      setIsSuccess(true);
+      clearCart();
+    }
+  }, []);
+
   const moreOfThisProduct = (id) => {
     addProduct(id);
   };
@@ -45,10 +57,41 @@ const CartPage = () => {
     removeProduct(id);
   };
 
+  const goToPayment = async () => {
+    const order = {
+      name,
+      email,
+      city,
+      postalCode,
+      streetAddress,
+      country,
+      cartProducts,
+    };
+    const response = await axios.post("/api/checkout", order);
+    if (response.data.url) {
+      window.location = response.data.url;
+    }
+  };
+
   let total = 0;
   for (const productId of cartProducts) {
     const price = products.find((p) => p._id === productId)?.price || 0;
     total += price;
+  }
+
+  if (isSuccess) {
+    return (
+      <>
+        <Center>
+          <ColumnsWrapper>
+            <Box>
+              <h1>Thanks for your order!</h1>
+              <p>We will email you when your order will be sent.</p>
+            </Box>
+          </ColumnsWrapper>
+        </Center>
+      </>
+    );
   }
 
   return (
@@ -115,6 +158,7 @@ const CartPage = () => {
             <Input
               type="text"
               placeholder="Email"
+              required={true}
               value={email}
               name="email"
               onChange={(ev) => setEmail(ev.target.value)}
@@ -149,7 +193,7 @@ const CartPage = () => {
               name="country"
               onChange={(ev) => setCountry(ev.target.value)}
             />
-            <Button black block>
+            <Button black block onClick={goToPayment}>
               Continue to payment
             </Button>
           </Box>
