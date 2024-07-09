@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   CardTitle,
   Price,
@@ -8,6 +8,7 @@ import {
   WhiteBox,
 } from "../StyledComponents/NewProductsSection";
 import Button from "../Button/Button";
+import { CartContext } from "../CartContext/CartContext";
 
 type Props = {
   _id: string;
@@ -19,6 +20,11 @@ type Props = {
 
 const ProductCard = ({ _id, title, description, price, images }: Props) => {
   const url = "/product/" + _id;
+  const { addProduct } = useContext(CartContext);
+
+  const addToCart = () => {
+    addProduct(_id);
+  };
   return (
     <ProductWrapper>
       <WhiteBox href={url}>
@@ -30,7 +36,7 @@ const ProductCard = ({ _id, title, description, price, images }: Props) => {
         <CardTitle href={url}>{title}</CardTitle>
         <PriceRow>
           <Price>${price.toFixed(2)}</Price>
-          <Button block primary outline>
+          <Button block primary outline onClick={addToCart}>
             Add to cart
           </Button>
         </PriceRow>

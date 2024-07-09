@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Center from "../StyledComponents/Center";
 import {
   Logo,
@@ -8,9 +8,11 @@ import {
   StyledNav,
   Wrapper,
 } from "../StyledComponents/StyledComponents";
+import { CartContext } from "../CartContext/CartContext";
 
 const Header = () => {
   const [mobileNavActive, setMobileNavActive] = useState(false);
+  const { cartProducts } = useContext(CartContext);
   return (
     <StyledHeader>
       <Center>
@@ -21,7 +23,7 @@ const Header = () => {
             <NavLink href={"/products"}>All products</NavLink>
             <NavLink href={"/categories"}>Categories</NavLink>
             <NavLink href={"/account"}>Account</NavLink>
-            <NavLink href={"/cart"}>Cart</NavLink>
+            <NavLink href={"/cart"}>Cart ({cartProducts.length})</NavLink>
           </StyledNav>
         </Wrapper>
       </Center>

@@ -54,4 +54,8 @@ const NavButton = styled.button`
   }
 `;
 
-export { StyledHeader, Logo, Wrapper, StyledNav, NavLink, NavButton };
+const Title = styled.h1`
+  font-size: 1.5em;
+`;
+
+export { StyledHeader, Logo, Wrapper, StyledNav, NavLink, NavButton, Title };
