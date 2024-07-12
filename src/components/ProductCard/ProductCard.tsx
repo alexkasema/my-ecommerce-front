@@ -19,7 +19,7 @@ type Props = {
 };
 
 const ProductCard = ({ _id, title, description, price, images }: Props) => {
-  const url = "/product/" + _id;
+  const url = "/products/" + _id;
   const { addProduct } = useContext(CartContext);
 
   const addToCart = () => {
