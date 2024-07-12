@@ -8,6 +8,8 @@ const StyledHeader = styled.header`
 const Logo = styled(Link)`
   color: #fff;
   text-decoration: none;
+  position: relative;
+  z-index: 3;
 `;
 
 const Wrapper = styled.div`
@@ -17,6 +19,14 @@ const Wrapper = styled.div`
 `;
 
 const StyledNav = styled.nav`
+  ${(props) =>
+    props.mobileNavActive
+      ? `
+    display: block;
+  `
+      : `
+    display: none;
+  `}
   gap: 15px;
   position: fixed;
   top: 0;
